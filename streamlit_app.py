@@ -16,7 +16,7 @@ st.set_page_config(
 st.sidebar.title("Presentation Menu")
 st.sidebar.markdown("Navigate through the feasibility study sections:")
 page = st.sidebar.radio("Go to", 
-    ["Executive Summary", "Market Analysis", "Facility & Process Engineering", "Technical & Operations", "Financial Projections"]
+    ["Executive Summary", "Market Analysis", "Facility & Process Engineering", "Technical & Operations", "Financial Projections", "BOM & Costing Analysis"]
 )
 
 # --- PAGE 1: EXECUTIVE SUMMARY ---
@@ -179,24 +179,24 @@ elif page == "BOM & Costing Analysis":
 
     # ── RAW DATA ──────────────────────────────────────────────────────────────
     rm_data = pd.DataFrame({
-        "Material":     ["Corn-Local", "Corn-Imported", "Oil", "Flavour", "Salt", "Other-Mat", "Starch", "Milk"],
-        "Input_KG":     [414.92, 295.36, 216.75, 67.11, 4.24, 0.89, 0.67, 0.06],
-        "Formula_Pct":  [0.41492, 0.29536, 0.21675, 0.06711, 0.00424, 0.00089, 0.00067, 0.00006],
-        "Unit_Cost_USD":[0.22, 0.24, 1.10, 5.00, 0.15, 1.00, 0.40, 2.80],
+        "Material":      ["Corn-Local", "Corn-Imported", "Oil", "Flavour", "Salt", "Other-Mat", "Starch", "Milk"],
+        "Input_KG":      [414.92, 295.36, 216.75, 67.11, 4.24, 0.89, 0.67, 0.06],
+        "Formula_Pct":   [0.41492, 0.29536, 0.21675, 0.06711, 0.00424, 0.00089, 0.00067, 0.00006],
+        "Unit_Cost_USD": [0.22, 0.24, 1.10, 5.00, 0.15, 1.00, 0.40, 2.80],
         "Total_Cost_USD":[91.2824, 70.8864, 238.425, 335.55, 0.636, 0.89, 0.268, 0.168],
     })
 
     pkg_data = pd.DataFrame({
-        "Material":     ["Cartons", "Wrapper", "Outer", "Tape", "Plastic Bags", "Ink", "Banner", "Shrink"],
-        "Qty":          [1843.81, 79.99, 33.08, 3.54, 1.10, 0.44, 0.02, 0.01],
-        "UOM":          ["Pieces", "KG", "Pieces", "Rolls", "Pieces", "KG/Liters", "Pieces", "KG"],
-        "Unit_Cost_USD":[0.15, 2.50, 0.25, 0.50, 0.05, 8.00, 5.00, 2.00],
+        "Material":      ["Cartons", "Wrapper", "Outer", "Tape", "Plastic Bags", "Ink", "Banner", "Shrink"],
+        "Qty":           [1843.81, 79.99, 33.08, 3.54, 1.10, 0.44, 0.02, 0.01],
+        "UOM":           ["Pieces", "KG", "Pieces", "Rolls", "Pieces", "KG/Liters", "Pieces", "KG"],
+        "Unit_Cost_USD": [0.15, 2.50, 0.25, 0.50, 0.05, 8.00, 5.00, 2.00],
         "Total_Cost_USD":[276.5715, 199.975, 8.27, 1.77, 0.055, 3.52, 0.10, 0.02],
     })
 
-    total_rm_cost   = rm_data["Total_Cost_USD"].sum()       # 737.2738
-    total_pkg_cost  = pkg_data["Total_Cost_USD"].sum()      # 490.2815
-    total_bom_cost  = total_rm_cost + total_pkg_cost        # 1227.5553
+    total_rm_cost    = rm_data["Total_Cost_USD"].sum()       # 737.2738
+    total_pkg_cost   = pkg_data["Total_Cost_USD"].sum()      # 490.2815
+    total_bom_cost   = total_rm_cost + total_pkg_cost        # 1227.5553
     rm_pct_of_total  = total_rm_cost  / total_bom_cost * 100
     pkg_pct_of_total = total_pkg_cost / total_bom_cost * 100
     cost_per_kg      = total_bom_cost / 1000
@@ -438,11 +438,11 @@ elif page == "BOM & Costing Analysis":
         st.markdown("---")
         st.markdown("#### 📐 Cost Component Summary Table")
         summary_table = pd.DataFrame({
-            "Component":         ["Corn (Local)", "Corn (Imported)", "Oil", "Flavour", "Salt + Other + Starch + Milk",
-                                  "Cartons", "Wrapper Film", "Outer + Tape + Other Pkg"],
-            "USD / Ton":         [91.28, 70.89, 238.43, 335.55, 1.96,
-                                  276.57, 199.98, 13.73],
-            "% of Total BOM":    [
+            "Component":       ["Corn (Local)", "Corn (Imported)", "Oil", "Flavour", "Salt + Other + Starch + Milk",
+                                "Cartons", "Wrapper Film", "Outer + Tape + Other Pkg"],
+            "USD / Ton":       [91.28, 70.89, 238.43, 335.55, 1.96,
+                                276.57, 199.98, 13.73],
+            "% of Total BOM":  [
                 round(91.28  / total_bom_cost * 100, 1),
                 round(70.89  / total_bom_cost * 100, 1),
                 round(238.43 / total_bom_cost * 100, 1),
@@ -452,7 +452,7 @@ elif page == "BOM & Costing Analysis":
                 round(199.98 / total_bom_cost * 100, 1),
                 round(13.73  / total_bom_cost * 100, 1),
             ],
-            "Category":          ["RM","RM","RM","RM","RM","Pkg","Pkg","Pkg"]
+            "Category": ["RM","RM","RM","RM","RM","Pkg","Pkg","Pkg"]
         })
         summary_table["% of Total BOM"] = summary_table["% of Total BOM"].astype(str) + "%"
         summary_table["USD / Ton"] = summary_table["USD / Ton"].apply(lambda x: f"${x:,.2f}")
