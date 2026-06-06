@@ -29,35 +29,33 @@ if page == "Executive Summary":
     with col1:
         st.markdown("### 📌 Project Parameters")
         st.markdown("""
-        * **Location:** Sadat City, Monufia Governorate, Egypt
-        * **Core Product:** Puff Corn Extruded Snacks 
+        * **Location:** Sadat City, Egypt (Industrial Zone)
+        * **Core Product:** Puff Corn Extruded Snacks & Pellet Chips
         * **Capacity:** 150 kg/hr Base Line
-        * **Primary Technology:** Jinan Sunward High-Precision Twin-Screw Extrusion
+        * **Primary Technology:** High-Precision Twin-Screw Extrusion
         * **Packaging:** 2x High-speed Vertical Form Fill Seal (VFFS) machines
         """)
     with col2:
         st.markdown("### 🎯 Strategic Objectives")
         st.markdown("""
         * Capture growing domestic demand for affordable, high-quality snacks.
-        * Reach financial break-even point by month 14 of active production.
-        * Ensure a steady 80% OEE (Overall Equipment Effectiveness) within the first 6 months.
-        * Achieve Return on Investment (ROI) within 2.5 to 3 years.
+        * Leverage competitive land pricing and industrial infrastructure in Sadat City.
+        * Ensure maximum OEE (Overall Equipment Effectiveness) from Day 1.
+        * Achieve ROI within the standard 3-year FMCG target window.
         """)
-    st.info("💡 **Recommendation:** The project is highly feasible. Proceed with the 12,000,000 EGP CAPEX allocation for land acquisition and machinery sourcing based on strong cash flow projections.")
+    st.info("💡 **Recommendation:** Proceed with CAPEX allocation for land acquisition and OEM down payments based on the positive 3-year financial outlook.")
 
 # --- PAGE 2: MARKET ANALYSIS ---
 elif page == "Market Analysis":
     st.title("📊 Market Analysis & Demand")
     st.markdown("---")
-    
     market_data = pd.DataFrame({
         "Year": ["2024", "2025", "2026", "2027", "2028"],
         "Market Size (Billion EGP)": [12.5, 14.1, 16.0, 18.2, 20.5]
     })
-    fig = px.line(market_data, x="Year", y="Market Size (Billion EGP)", 
-                 title="Projected Extruded Snack Market Size Growth (Egypt)",
-                 markers=True, text="Market Size (Billion EGP)")
-    fig.update_traces(textposition="top center", line_color="#1f77b4", line_width=4, marker_size=10)
+    fig = px.bar(market_data, x="Year", y="Market Size (Billion EGP)", 
+                 title="Projected Extruded Snack Market Size (Egypt)",
+                 text_auto=True, color_discrete_sequence=["#1f77b4"])
     st.plotly_chart(fig, use_container_width=True)
 
 # --- PAGE 3: FACILITY & PROCESS ENGINEERING ---
@@ -65,99 +63,98 @@ elif page == "Facility & Process Engineering":
     st.title("📐 Facility Layout & Process Flow")
     st.markdown("---")
     
+    # Create two interactive tabs
     tab1, tab2 = st.tabs(["🔄 Processing Workflow", "🏗️ Facility Block Layout (Schematic)"])
     
-    # TAB 1: WORKFLOW (NATIVE PDF EXPORT)
+    # TAB 1: IDEAL WORKFLOW DIAGRAM
     with tab1:
         st.markdown("### Technical Manufacturing Process Flow")
+        st.write("Optimized linear flow showing unit operations from bulk material intake through to final palletizing.")
+        
+        # Highly granular industrial engineering process flowchart
         dot = graphviz.Digraph()
         dot.attr(rankdir='LR', size='12,6')
         dot.attr('node', shape='box', fontname='Helvetica', fontsize='11')
         
-        dot.node('A1', 'Bulk Intake\n(Corn Grits / 10-12% Moisture)', style='filled', fillcolor='#D2E8F1')
-        dot.node('B1', 'Batch Mixing &\nConditioning (16-18% Target)', style='filled', fillcolor='#EAEAEA')
-        dot.node('C1', 'Twin-Screw Extrusion\n(150 kg/hr / 130-180°C)', style='filled', fillcolor='#FBC4C4')
-        dot.node('D1', 'Continuous\nDrying/Roasting Oven', style='filled', fillcolor='#FBC4C4')
-        dot.node('E1', 'Rotary Coating Drum\n(Oil + Flavor Slurry)', style='filled', fillcolor='#EAEAEA')
+        # Raw Material & Prep Block
+        dot.node('A1', 'Bulk Intake\n(Corn Grits / Pellets)', style='filled', fillcolor='#D2E8F1')
+        dot.node('A2', 'Sifting & De-stoning\n(Quality Gates)', style='filled', fillcolor='#D2E8F1')
+        dot.node('B1', 'High-Speed Batch Mixing\n(Moisture Conditioning)', style='filled', fillcolor='#EAEAEA')
+        dot.node('B2', 'Volumetric Feeding\n(Surge Hopper Control)', style='filled', fillcolor='#EAEAEA')
+        
+        # Thermal & Extrusion Block
+        dot.node('C1', 'Twin-Screw Extrusion\n(High Shear / Thermomechanical)', style='filled', fillcolor='#FBC4C4')
+        dot.node('C2', 'Pneumatic Conveying\n(Venting & Transport)', style='filled', fillcolor='#FBC4C4')
+        
+        # Processing & Seasoning Block
+        dot.node('D1', 'Continuous Multi-Pass\nDrying/Roasting Oven', style='filled', fillcolor='#FBC4C4')
+        dot.node('E1', 'Slurry Preparation\n(Oil + Flavor Blending)', style='filled', fillcolor='#EAEAEA')
+        dot.node('E2', 'Rotary Coating Drum\n(Liquid/Powder Application)', style='filled', fillcolor='#EAEAEA')
+        
+        # Packaging & Logistics Block
         dot.node('F1', 'Ambient Vibratory\nCooling Conveyor', style='filled', fillcolor='#EAEAEA')
         dot.node('G1', 'Multi-Head Weighers\n& 2x VFFS Systems', style='filled', fillcolor='#C1E9C1')
-        dot.node('H1', 'Finished Goods\nPalletizing', style='filled', fillcolor='#D2E8F1')
+        dot.node('H1', 'Secondary Carton\nPacking & Coding', style='filled', fillcolor='#C1E9C1')
+        dot.node('I1', 'Finished Goods\nPallet Storage', style='filled', fillcolor='#D2E8F1')
         
-        # FIXED LINE: Use tuples for edges instead of concatenated strings
-        dot.edges([('A1', 'B1'), ('B1', 'C1'), ('C1', 'D1'), ('D1', 'E1'), ('E1', 'F1'), ('F1', 'G1'), ('G1', 'H1')])
+        # Establish industrial flow connections
+        dot.edge('A1', 'A2')
+        dot.edge('A2', 'B1')
+        dot.edge('B1', 'B2')
+        dot.edge('B2', 'C1')
+        dot.edge('C1', 'C2')
+        dot.edge('C2', 'D1')
+        dot.edge('D1', 'E2')
+        dot.edge('E1', 'E2')
+        dot.edge('E2', 'F1')
+        dot.edge('F1', 'G1')
+        dot.edge('G1', 'H1')
+        dot.edge('H1', 'I1')
         
-        # Display Chart
         st.graphviz_chart(dot, use_container_width=True)
-        
-        # Native Graphviz PDF generation
-        pdf_bytes_workflow = dot.pipe(format='pdf')
-        st.download_button(
-            label="📄 Download Workflow as PDF",
-            data=pdf_bytes_workflow,
-            file_name="Processing_Workflow_Sadat_Plant.pdf",
-            mime="application/pdf"
-        )
+        st.caption("*Process layout engineered to prevent cross-contamination and ensure total production safety.*")
 
-    # TAB 2: FACILITY LAYOUT (BULLETPROOF SCATTER METHOD)
+    # TAB 2: FACILITY LAYOUT
     with tab2:
         st.markdown("### Plant Zoning & Master Layout")
-        fig_layout = go.Figure()
+        st.write("Conceptual footprint allocation based on Sadat City industrial zone standards. (Hover over zones for details).")
         
-        # Completely rewritten add_zone function using Scatter polygons
+        fig_layout = go.Figure()
+
+        # Helper function to add zones (rectangles)
         def add_zone(fig, x0, y0, x1, y1, color, name, description):
-            # Draw the box and handle hover text
-            fig.add_trace(go.Scatter(
-                x=[x0, x1, x1, x0, x0],
-                y=[y0, y0, y1, y1, y0],
-                fill="toself",
-                fillcolor=color,
-                mode='lines',
-                line=dict(color="black", width=2),
-                hoverinfo='text',
-                text=f"<b>{name}</b><br>{description}",
-                showlegend=False
-            ))
-            # Add the text label in the center
-            fig.add_annotation(
-                x=(x0+x1)/2,
-                y=(y0+y1)/2,
-                text=f"<b>{name}</b>",
-                showarrow=False,
-                font=dict(size=13, color="black")
-            )
+            fig.add_shape(type="rect", x0=x0, y0=y0, x1=x1, y1=y1, 
+                          line=dict(color="black", width=2), fillcolor=color)
+            fig.add_annotation(x=(x0+x1)/2, y=(y0+y1)/2, text=f"<b>{name}</b>", 
+                               showarrow=False, font=dict(size=13, color="black"))
+            fig.add_trace(go.Scatter(x=[(x0+x1)/2], y=[(y0+y1)/2], mode='markers', 
+                                     marker=dict(size=0.1, color='rgba(0,0,0,0)'),
+                                     name=name, hoverinfo='text', 
+                                     text=f"<b>{name}</b><br>{description}"))
 
         # Draw the main property boundary
-        fig_layout.add_trace(go.Scatter(
-            x=[0, 100, 100, 0, 0],
-            y=[0, 0, 100, 100, 0],
-            mode="lines",
-            line=dict(color="black", width=4),
-            hoverinfo="skip",
+        fig_layout.add_shape(type="rect", x0=0, y0=0, x1=100, y1=100, line=dict(color="black", width=4))
+
+        # Add all requested functions systematically
+        add_zone(fig_layout, 0, 75, 25, 100, "#a8d8ea", "Raw Material Intake", "Pneumatic unloading bays, material sifting, and raw storage silos.")
+        add_zone(fig_layout, 0, 0, 25, 75, "#aa96da", "Inventory & Warehouses", "Raw materials, film rolls, flavor storage, and ingredient warehousing.")
+        add_zone(fig_layout, 25, 35, 75, 100, "#ffb6b9", "Main Production Hall", "Twin-screw extrusion processing line feeding directly to the high-speed 2x VFFS cells.")
+        add_zone(fig_layout, 75, 45, 100, 100, "#a8e6cf", "Finished Goods Warehouse", "Staging zones, pallet racking, and direct outbound dispatch bays.")
+        add_zone(fig_layout, 25, 0, 45, 35, "#ffd3b6", "Maintenance Workshop", "Mechanical workshop equipped for rapid tooling, preventive line work, and parts inventory.")
+        add_zone(fig_layout, 45, 0, 60, 35, "#ffaaa5", "Quality Assurance Lab", "Physicochemical and moisture testing lab for continuous in-line sample analysis.")
+        add_zone(fig_layout, 60, 0, 100, 45, "#d4f0f0", "Admin & Utilities Building", "Corporate offices, meeting rooms, engineering offices, and plant control center.")
+
+        # Update layout properties to mimic clean blueprint visuals
+        fig_layout.update_layout(
+            xaxis=dict(showgrid=False, zeroline=False, visible=False, range=[-5, 105]),
+            yaxis=dict(showgrid=False, zeroline=False, visible=False, range=[-5, 105]),
+            height=600,
+            margin=dict(l=20, r=20, t=20, b=20),
+            plot_bgcolor='white',
             showlegend=False
-        ))
-
-        add_zone(fig_layout, 0, 75, 25, 100, "#a8d8ea", "RM Intake", "Pneumatic unloading bays.")
-        add_zone(fig_layout, 0, 0, 25, 75, "#aa96da", "Inventory", "Climate controlled storage.")
-        add_zone(fig_layout, 25, 35, 75, 100, "#ffb6b9", "Main Production Hall", "Extrusion and VFFS cells.")
-        add_zone(fig_layout, 75, 45, 100, 100, "#a8e6cf", "Finished Goods", "Pallet racking & dispatch.")
-        add_zone(fig_layout, 25, 0, 45, 35, "#ffd3b6", "Maintenance", "Workshop and spare parts.")
-        add_zone(fig_layout, 45, 0, 60, 35, "#ffaaa5", "QA Lab", "In-line sampling.")
-        add_zone(fig_layout, 60, 0, 100, 45, "#d4f0f0", "Admin", "Offices & control center.")
-
-        fig_layout.update_layout(xaxis=dict(visible=False), yaxis=dict(visible=False), height=550, margin=dict(l=0, r=0, t=0, b=0), plot_bgcolor='white', showlegend=False)
-        
-        # Display Chart
-        st.plotly_chart(fig_layout, use_container_width=True)
-        
-        # HTML Download
-        html_bytes_layout = fig_layout.to_html(include_plotlyjs="cdn").encode("utf-8")
-        st.download_button(
-            label="🌐 Download Schematic Layout (HTML)",
-            data=html_bytes_layout,
-            file_name="Facility_Layout_Sadat_Plant.html",
-            mime="text/html",
-            help="Downloads an interactive webpage file so you don't lose the hover descriptions. If you absolutely need a PDF, open the downloaded HTML file and use Ctrl+P to Print to PDF."
         )
+        
+        st.plotly_chart(fig_layout, use_container_width=True)
 
 # --- PAGE 4: TECHNICAL & OPERATIONS ---
 elif page == "Technical & Operations":
@@ -166,57 +163,46 @@ elif page == "Technical & Operations":
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("### Equipment Specifications")
-        st.success("**Extrusion Line**\n* 150 kg/hr Jinan Sunward Twin-Screw Extruder\n* Automated material feeding\n* High-efficiency continuous drying oven")
+        st.success("**Extrusion Line**\n* 150 kg/hr Twin-Screw Extruder\n* Automated material feeding\n* High-efficiency continuous drying oven")
         st.info("**Packaging Cell**\n* 2 x VFFS Packaging Machines\n* Integrated multi-head weighers\n* Date coding and automated splicing")
-        st.warning("**Utility Consumptions (Estimated Base Load)**\n* ⚡ **Electricity:** ~65 kW/h (Total Extrusion + Packaging)\n* 🔥 **Natural Gas:** ~8 m³/hr (Roasting/Drying Oven)\n* 💧 **Water:** ~25 L/hr (Conditioning & CIP requirements)\n* 💨 **Compressed Air:** ~0.8 m³/min @ 7 bar (Pneumatics & VFFS)")
+        
+        # --- NEW UTILITY CONSUMPTIONS ADDITION ---
+        st.warning("**Utility Consumptions (Estimated Base Load)**\n* ⚡ **Electricity:** ~65 kW/h (Total Extrusion + Packaging)\n* 🔥 **Natural Gas:** ~8 m³/hr (Roasting/Drying Oven)\n* 💧 **Water:** ~25 L/hr (Moisture conditioning & CIP requirements)\n* 💨 **Compressed Air:** ~0.8 m³/min @ 7 bar (Pneumatics & VFFS operations)")
         
     with col2:
         st.markdown("### Operational Excellence Framework")
         st.markdown("""
         * **Total Productive Maintenance (TPM):** Autonomous maintenance trained at the operator level.
-        * **Lean Manufacturing:** Continuous Gemba walks and Root Cause Analysis (RCA) to mitigate waste.
-        * **Predictive Maintenance:** Core assets integrated into centralized plant monitoring to prevent downtime.
-        * **Labor & Compliance:** Standard 40-48 hour workweeks aligned with current 7,000 EGP private-sector minimum wage laws.
+        * **Lean Manufacturing:** Continuous Gemba walks and Root Cause Analysis (RCA).
+        * **Predictive Maintenance:** Core assets integrated into the **IntelFix** system terminal to continuously monitor health and minimize downtime.
         """)
 
 # --- PAGE 5: FINANCIAL PROJECTIONS ---
 elif page == "Financial Projections":
-    st.title("💰 Financial Projections & Feasibility")
+    st.title("💰 Financial Projections (3-Year Outlook)")
     st.markdown("---")
     col1, col2 = st.columns(2)
-    
     with col1:
-        st.markdown("### Total CAPEX: 12,000,000 EGP")
+        st.markdown("### Estimated CAPEX Breakdown")
         capex_data = pd.DataFrame({
-            "Asset Category": ["Land & Building", "Machinery & Installation", "Initial Working Capital"],
-            "Amount (EGP)": [8000000, 2500000, 1500000]
+            "Category": ["Land (Sadat City NUCA)", "Facility Construction", "Extrusion Line", "2x VFFS Packaging", "Utilities & Auxiliaries"],
+            "Cost Allocation (%)": [15, 25, 35, 15, 10]
         })
-        fig_pie = px.pie(capex_data, values='Amount (EGP)', names='Asset Category', hole=0.4, 
-                         color_discrete_sequence=['#1f77b4', '#ff7f0e', '#2ca02c'])
+        fig_pie = px.pie(capex_data, values='Cost Allocation (%)', names='Category', hole=0.4)
         st.plotly_chart(fig_pie, use_container_width=True)
-        st.caption("*Sourcing Structure: 60% Owner Equity, 40% Commercial Bank Loan (CBE Industrial Initiative).*")
         
     with col2:
-        st.markdown("### 3-Year P&L Forecast (EGP)")
-        
-        y1_revenue = 22000000
-        y1_direct_costs = 14500000
-        y1_overhead = 2000000
-        growth_rate = 1.15 
-
+        st.markdown("### 3-Year P&L (EGP)")
         financials = pd.DataFrame({
             "Year": ["Year 1", "Year 2", "Year 3"],
-            "Gross Revenue": [y1_revenue, y1_revenue * growth_rate, y1_revenue * (growth_rate**2)],
-            "Direct Costs": [y1_direct_costs, y1_direct_costs * growth_rate, y1_direct_costs * (growth_rate**2)],
-            "Overhead": [y1_overhead, y1_overhead * 1.10, y1_overhead * (1.10**2)] 
+            "Revenue": [45000000, 68000000, 95000000],
+            "Operating Costs": [32000000, 41000000, 52000000],
+            "Net Profit": [13000000, 27000000, 43000000]
         })
-        financials["EBITDA"] = financials["Gross Revenue"] - financials["Direct Costs"] - financials["Overhead"]
-
         fig_bar = go.Figure(data=[
-            go.Bar(name='Gross Revenue', x=financials['Year'], y=financials['Gross Revenue'], marker_color='#2ca02c'),
-            go.Bar(name='Direct Costs', x=financials['Year'], y=financials['Direct Costs'], marker_color='#d62728'),
-            go.Bar(name='EBITDA', x=financials['Year'], y=financials['EBITDA'], marker_color='#1f77b4')
+            go.Bar(name='Revenue', x=financials['Year'], y=financials['Revenue'], marker_color='#2ca02c'),
+            go.Bar(name='Operating Costs', x=financials['Year'], y=financials['Operating Costs'], marker_color='#d62728'),
+            go.Bar(name='Net Profit', x=financials['Year'], y=financials['Net Profit'], marker_color='#1f77b4')
         ])
-        fig_bar.update_layout(barmode='group', title="Income & Cost Analysis")
+        fig_bar.update_layout(barmode='group')
         st.plotly_chart(fig_bar, use_container_width=True)
-        st.caption("*Year 1 data based on official feasibility estimates. Year 2 & 3 project 15% revenue scaling.*")
