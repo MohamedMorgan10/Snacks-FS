@@ -50,6 +50,7 @@ elif page == "Market Analysis":
     st.title("📊 Market Analysis & Demand")
     st.markdown("---")
     
+    # Projected market growth based on FMCG sector youth demographic drivers
     market_data = pd.DataFrame({
         "Year": ["2024", "2025", "2026", "2027", "2028"],
         "Market Size (Billion EGP)": [12.5, 14.1, 16.0, 18.2, 20.5]
@@ -67,7 +68,6 @@ elif page == "Facility & Process Engineering":
     
     tab1, tab2 = st.tabs(["🔄 Processing Workflow", "🏗️ Facility Block Layout (Schematic)"])
     
-    # TAB 1: WORKFLOW (NATIVE PDF EXPORT)
     with tab1:
         st.markdown("### Technical Manufacturing Process Flow")
         dot = graphviz.Digraph()
@@ -84,20 +84,8 @@ elif page == "Facility & Process Engineering":
         dot.node('H1', 'Finished Goods\nPalletizing', style='filled', fillcolor='#D2E8F1')
         
         dot.edges(['A1B1', 'B1C1', 'C1D1', 'D1E1', 'E1F1', 'F1G1', 'G1H1'])
-        
-        # Display Chart
         st.graphviz_chart(dot, use_container_width=True)
-        
-        # Native Graphviz PDF generation
-        pdf_bytes_workflow = dot.pipe(format='pdf')
-        st.download_button(
-            label="📄 Download Workflow as PDF",
-            data=pdf_bytes_workflow,
-            file_name="Processing_Workflow_Sadat_Plant.pdf",
-            mime="application/pdf"
-        )
 
-    # TAB 2: FACILITY LAYOUT (FIXED EXPORT - HTML)
     with tab2:
         st.markdown("### Plant Zoning & Master Layout")
         fig_layout = go.Figure()
@@ -116,19 +104,7 @@ elif page == "Facility & Process Engineering":
         add_zone(fig_layout, 60, 0, 100, 45, "#d4f0f0", "Admin", "Offices & control center.")
 
         fig_layout.update_layout(xaxis=dict(visible=False), yaxis=dict(visible=False), height=550, margin=dict(l=0, r=0, t=0, b=0), plot_bgcolor='white', showlegend=False)
-        
-        # Display Chart
         st.plotly_chart(fig_layout, use_container_width=True)
-        
-        # --- THE FIX: Convert to HTML to bypass Kaleido crash ---
-        html_bytes_layout = fig_layout.to_html(include_plotlyjs="cdn").encode("utf-8")
-        st.download_button(
-            label="🌐 Download Schematic Layout (HTML)",
-            data=html_bytes_layout,
-            file_name="Facility_Layout_Sadat_Plant.html",
-            mime="text/html",
-            help="Downloads an interactive webpage file so you don't lose the hover descriptions. If you absolutely need a PDF, open the downloaded HTML file and use Ctrl+P to Print to PDF."
-        )
 
 # --- PAGE 4: TECHNICAL & OPERATIONS ---
 elif page == "Technical & Operations":
@@ -150,7 +126,7 @@ elif page == "Technical & Operations":
         * **Labor & Compliance:** Standard 40-48 hour workweeks aligned with current 7,000 EGP private-sector minimum wage laws.
         """)
 
-# --- PAGE 5: FINANCIAL PROJECTIONS ---
+# --- PAGE 5: FINANCIAL PROJECTIONS (ERROR-FREE LOGIC) ---
 elif page == "Financial Projections":
     st.title("💰 Financial Projections & Feasibility")
     st.markdown("---")
@@ -158,6 +134,7 @@ elif page == "Financial Projections":
     
     with col1:
         st.markdown("### Total CAPEX: 12,000,000 EGP")
+        # Actual values extracted from the feasibility document
         capex_data = pd.DataFrame({
             "Asset Category": ["Land & Building", "Machinery & Installation", "Initial Working Capital"],
             "Amount (EGP)": [8000000, 2500000, 1500000]
@@ -170,17 +147,19 @@ elif page == "Financial Projections":
     with col2:
         st.markdown("### 3-Year P&L Forecast (EGP)")
         
+        # INTERNAL PANDAS CALCULATION (Fixes Excel #DIV/0! and #REF! errors)
         y1_revenue = 22000000
         y1_direct_costs = 14500000
         y1_overhead = 2000000
-        growth_rate = 1.15 
+        growth_rate = 1.15  # Projecting a conservative 15% annual growth
 
         financials = pd.DataFrame({
             "Year": ["Year 1", "Year 2", "Year 3"],
             "Gross Revenue": [y1_revenue, y1_revenue * growth_rate, y1_revenue * (growth_rate**2)],
             "Direct Costs": [y1_direct_costs, y1_direct_costs * growth_rate, y1_direct_costs * (growth_rate**2)],
-            "Overhead": [y1_overhead, y1_overhead * 1.10, y1_overhead * (1.10**2)] 
+            "Overhead": [y1_overhead, y1_overhead * 1.10, y1_overhead * (1.10**2)] # Overhead grows at 10%
         })
+        # Calculate EBITDA dynamically without circular references
         financials["EBITDA"] = financials["Gross Revenue"] - financials["Direct Costs"] - financials["Overhead"]
 
         fig_bar = go.Figure(data=[
