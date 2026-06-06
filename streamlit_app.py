@@ -30,10 +30,10 @@ if page == "Executive Summary":
         st.markdown("### 📌 Project Parameters")
         st.markdown("""
         * **Location:** Sadat City, Egypt (Industrial Zone)
-        * **Core Product:** Puff Corn Extruded Snacks
-        * **Capacity:** 150 kg/hr 
-        * **Primary Technology:** Twin-screw extrusion line
-        * **Packaging:** 2 High-speed Vertical Form Fill Seal (VFFS) machines
+        * **Core Product:** Puff Corn Extruded Snacks & Pellet Chips
+        * **Capacity:** 150 kg/hr Base Line
+        * **Primary Technology:** High-Precision Twin-Screw Extrusion
+        * **Packaging:** 2x High-speed Vertical Form Fill Seal (VFFS) machines
         """)
     with col2:
         st.markdown("### 🎯 Strategic Objectives")
@@ -58,7 +58,7 @@ elif page == "Market Analysis":
                  text_auto=True, color_discrete_sequence=["#1f77b4"])
     st.plotly_chart(fig, use_container_width=True)
 
-# --- PAGE 3: FACILITY & PROCESS ENGINEERING (NEW) ---
+# --- PAGE 3: FACILITY & PROCESS ENGINEERING ---
 elif page == "Facility & Process Engineering":
     st.title("📐 Facility Layout & Process Flow")
     st.markdown("---")
@@ -66,47 +66,67 @@ elif page == "Facility & Process Engineering":
     # Create two interactive tabs
     tab1, tab2 = st.tabs(["🔄 Processing Workflow", "🏗️ Facility Block Layout (Schematic)"])
     
-    # TAB 1: WORKFLOW DIAGRAM
+    # TAB 1: IDEAL WORKFLOW DIAGRAM
     with tab1:
-        st.markdown("### Manufacturing Process Flow (150 kg/hr Puff Corn)")
+        st.markdown("### Technical Manufacturing Process Flow")
+        st.write("Optimized linear flow showing unit operations from bulk material intake through to final palletizing.")
         
-        # Using Graphviz to create a professional flowchart
+        # Highly granular industrial engineering process flowchart
         dot = graphviz.Digraph()
-        dot.attr(rankdir='LR', size='10,5')
+        dot.attr(rankdir='LR', size='12,6')
+        dot.attr('node', shape='box', fontname='Helvetica', fontsize='11')
         
-        # Define nodes with colors
-        dot.node('A', 'Raw Material Intake\n(Corn Grits, Oil, Flavors)', style='filled', fillcolor='#lightblue')
-        dot.node('B', 'Mixing & Moisture\nConditioning', style='filled', fillcolor='#lightgrey')
-        dot.node('C', 'Twin-Screw Extrusion\n(150 kg/hr)', style='filled', fillcolor='#ffcccb')
-        dot.node('D', 'Drying / Roasting\nOven', style='filled', fillcolor='#ffcccb')
-        dot.node('E', 'Flavoring Drum &\nSlurry Coating', style='filled', fillcolor='#lightgrey')
-        dot.node('F', 'Cooling Conveyor', style='filled', fillcolor='#lightgrey')
-        dot.node('G', '2x High-Speed\nVFFS Packaging', style='filled', fillcolor='#lightgreen')
-        dot.node('H', 'Carton Packing &\nPalletizing', style='filled', fillcolor='#lightgreen')
-        dot.node('I', 'Finished Goods\nInventory', style='filled', fillcolor='#lightblue')
+        # Raw Material & Prep Block
+        dot.node('A1', 'Bulk Intake\n(Corn Grits / Pellets)', style='filled', fillcolor='#D2E8F1')
+        dot.node('A2', 'Sifting & De-stoning\n(Quality Gates)', style='filled', fillcolor='#D2E8F1')
+        dot.node('B1', 'High-Speed Batch Mixing\n(Moisture Conditioning)', style='filled', fillcolor='#EAEAEA')
+        dot.node('B2', 'Volumetric Feeding\n(Surge Hopper Control)', style='filled', fillcolor='#EAEAEA')
         
-        # Define edges
-        dot.edges(['AB', 'BC', 'CD', 'DE', 'EF', 'FG', 'GH', 'HI'])
+        # Thermal & Extrusion Block
+        dot.node('C1', 'Twin-Screw Extrusion\n(High Shear / Thermomechanical)', style='filled', fillcolor='#FBC4C4')
+        dot.node('C2', 'Pneumatic Conveying\n(Venting & Transport)', style='filled', fillcolor='#FBC4C4')
+        
+        # Processing & Seasoning Block
+        dot.node('D1', 'Continuous Multi-Pass\nDrying/Roasting Oven', style='filled', fillcolor='#FBC4C4')
+        dot.node('E1', 'Slurry Preparation\n(Oil + Flavor Blending)', style='filled', fillcolor='#EAEAEA')
+        dot.node('E2', 'Rotary Coating Drum\n(Liquid/Powder Application)', style='filled', fillcolor='#EAEAEA')
+        
+        # Packaging & Logistics Block
+        dot.node('F1', 'Ambient Vibratory\nCooling Conveyor', style='filled', fillcolor='#EAEAEA')
+        dot.node('G1', 'Multi-Head Weighers\n& 2x VFFS Systems', style='filled', fillcolor='#C1E9C1')
+        dot.node('H1', 'Secondary Carton\nPacking & Coding', style='filled', fillcolor='#C1E9C1')
+        dot.node('I1', 'Finished Goods\nPallet Storage', style='filled', fillcolor='#D2E8F1')
+        
+        # Establish industrial flow connections
+        dot.edge('A1', 'A2')
+        dot.edge('A2', 'B1')
+        dot.edge('B1', 'B2')
+        dot.edge('B2', 'C1')
+        dot.edge('C1', 'C2')
+        dot.edge('C2', 'D1')
+        dot.edge('D1', 'E2')
+        dot.edge('E1', 'E2')
+        dot.edge('E2', 'F1')
+        dot.edge('F1', 'G1')
+        dot.edge('G1', 'H1')
+        dot.edge('H1', 'I1')
         
         st.graphviz_chart(dot, use_container_width=True)
-        st.caption("*Process flow optimized for continuous operation and minimal changeover downtime.*")
+        st.caption("*Process layout engineered to prevent cross-contamination and ensure total production safety.*")
 
     # TAB 2: FACILITY LAYOUT
     with tab2:
         st.markdown("### Plant Zoning & Master Layout")
         st.write("Conceptual footprint allocation based on Sadat City industrial zone standards. (Hover over zones for details).")
         
-        # Using Plotly to draw a schematic block layout (AutoCAD proxy)
         fig_layout = go.Figure()
 
         # Helper function to add zones (rectangles)
         def add_zone(fig, x0, y0, x1, y1, color, name, description):
             fig.add_shape(type="rect", x0=x0, y0=y0, x1=x1, y1=y1, 
                           line=dict(color="black", width=2), fillcolor=color)
-            # Add text annotation in the center of the shape
             fig.add_annotation(x=(x0+x1)/2, y=(y0+y1)/2, text=f"<b>{name}</b>", 
-                               showarrow=False, font=dict(size=14, color="black"))
-            # Add invisible scatter point for hover tooltip
+                               showarrow=False, font=dict(size=13, color="black"))
             fig.add_trace(go.Scatter(x=[(x0+x1)/2], y=[(y0+y1)/2], mode='markers', 
                                      marker=dict(size=0.1, color='rgba(0,0,0,0)'),
                                      name=name, hoverinfo='text', 
@@ -115,16 +135,16 @@ elif page == "Facility & Process Engineering":
         # Draw the main property boundary
         fig_layout.add_shape(type="rect", x0=0, y0=0, x1=100, y1=100, line=dict(color="black", width=4))
 
-        # Add functional zones
-        add_zone(fig_layout, 0, 60, 30, 100, "#a8d8ea", "Raw Material Intake", "Receiving bays, bulk silos, and initial inspection.")
-        add_zone(fig_layout, 0, 0, 30, 60, "#aa96da", "RM Warehouse", "Climate-controlled storage for grits, oils, and flavoring powders.")
-        add_zone(fig_layout, 30, 30, 70, 100, "#ffb6b9", "Main Production Hall", "Twin-screw extrusion, drying, flavoring, and 2x VFFS lines.")
-        add_zone(fig_layout, 70, 40, 100, 100, "#a8e6cf", "Finished Goods", "Pallet racking, dispatch loading bays, and inventory control.")
-        add_zone(fig_layout, 30, 0, 50, 30, "#ffd3b6", "Maintenance Workshop", "Tooling, spare parts, IntelFix terminal, and welding bays.")
-        add_zone(fig_layout, 50, 0, 70, 30, "#ffaaa5", "Quality Lab", "In-line sampling, moisture testing, and QC compliance.")
-        add_zone(fig_layout, 70, 0, 100, 40, "#d4f0f0", "Admin Building", "Offices, meeting rooms, staff changing rooms, and cafeteria.")
+        # Add all requested functions systematically
+        add_zone(fig_layout, 0, 75, 25, 100, "#a8d8ea", "Raw Material Intake", "Pneumatic unloading bays, material sifting, and raw storage silos.")
+        add_zone(fig_layout, 0, 0, 25, 75, "#aa96da", "Inventory & Warehouses", "Raw materials, film rolls, flavor storage, and ingredient warehousing.")
+        add_zone(fig_layout, 25, 35, 75, 100, "#ffb6b9", "Main Production Hall", "Twin-screw extrusion processing line feeding directly to the high-speed 2x VFFS cells.")
+        add_zone(fig_layout, 75, 45, 100, 100, "#a8e6cf", "Finished Goods Warehouse", "Staging zones, pallet racking, and direct outbound dispatch bays.")
+        add_zone(fig_layout, 25, 0, 45, 35, "#ffd3b6", "Maintenance Workshop", "Mechanical workshop equipped for rapid tooling, preventive line work, and parts inventory.")
+        add_zone(fig_layout, 45, 0, 60, 35, "#ffaaa5", "Quality Assurance Lab", "Physicochemical and moisture testing lab for continuous in-line sample analysis.")
+        add_zone(fig_layout, 60, 0, 100, 45, "#d4f0f0", "Admin & Utilities Building", "Corporate offices, meeting rooms, engineering offices, and plant control center.")
 
-        # Update layout properties to look like a clean blueprint
+        # Update layout properties to mimic clean blueprint visuals
         fig_layout.update_layout(
             xaxis=dict(showgrid=False, zeroline=False, visible=False, range=[-5, 105]),
             yaxis=dict(showgrid=False, zeroline=False, visible=False, range=[-5, 105]),
@@ -143,14 +163,18 @@ elif page == "Technical & Operations":
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("### Equipment Specifications")
-        st.success("**Extrusion Line**\n* 150 kg/hr Twin-Screw Extruder\n* Automated material feeding\n* High-efficiency drying oven")
+        st.success("**Extrusion Line**\n* 150 kg/hr Twin-Screw Extruder\n* Automated material feeding\n* High-efficiency continuous drying oven")
         st.info("**Packaging Cell**\n* 2 x VFFS Packaging Machines\n* Integrated multi-head weighers\n* Date coding and automated splicing")
+        
+        # --- NEW UTILITY CONSUMPTIONS ADDITION ---
+        st.warning("**Utility Consumptions (Estimated Base Load)**\n* ⚡ **Electricity:** ~65 kW/h (Total Extrusion + Packaging)\n* 🔥 **Natural Gas:** ~8 m³/hr (Roasting/Drying Oven)\n* 💧 **Water:** ~25 L/hr (Moisture conditioning & CIP requirements)\n* 💨 **Compressed Air:** ~0.8 m³/min @ 7 bar (Pneumatics & VFFS operations)")
+        
     with col2:
         st.markdown("### Operational Excellence Framework")
         st.markdown("""
         * **Total Productive Maintenance (TPM):** Autonomous maintenance trained at the operator level.
         * **Lean Manufacturing:** Continuous Gemba walks and Root Cause Analysis (RCA).
-        * **Predictive Maintenance:** Core assets integrated into the IntelFix system to prevent catastrophic downtime.
+        * **Predictive Maintenance:** Core assets integrated into the **IntelFix** system terminal to continuously monitor health and minimize downtime.
         """)
 
 # --- PAGE 5: FINANCIAL PROJECTIONS ---
@@ -161,7 +185,7 @@ elif page == "Financial Projections":
     with col1:
         st.markdown("### Estimated CAPEX Breakdown")
         capex_data = pd.DataFrame({
-            "Category": ["Land (Sadat City NUCA)", "Facility Construction", "Extrusion Line", "2x VFFS Packaging", "Utilities"],
+            "Category": ["Land (Sadat City NUCA)", "Facility Construction", "Extrusion Line", "2x VFFS Packaging", "Utilities & Auxiliaries"],
             "Cost Allocation (%)": [15, 25, 35, 15, 10]
         })
         fig_pie = px.pie(capex_data, values='Cost Allocation (%)', names='Category', hole=0.4)
@@ -181,4 +205,5 @@ elif page == "Financial Projections":
             go.Bar(name='Net Profit', x=financials['Year'], y=financials['Net Profit'], marker_color='#1f77b4')
         ])
         fig_bar.update_layout(barmode='group')
+        st.plotly_chart(fig_bar, use_container_width=True)
         st.plotly_chart(fig_bar, use_container_width=True)
