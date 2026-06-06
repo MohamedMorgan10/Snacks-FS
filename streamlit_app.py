@@ -97,7 +97,7 @@ elif page == "Facility & Process Engineering":
             mime="application/pdf"
         )
 
-    # TAB 2: FACILITY LAYOUT (FIXED EXPORT)
+    # TAB 2: FACILITY LAYOUT (FIXED EXPORT - HTML)
     with tab2:
         st.markdown("### Plant Zoning & Master Layout")
         fig_layout = go.Figure()
@@ -191,4 +191,3 @@ elif page == "Financial Projections":
         fig_bar.update_layout(barmode='group', title="Income & Cost Analysis")
         st.plotly_chart(fig_bar, use_container_width=True)
         st.caption("*Year 1 data based on official feasibility estimates. Year 2 & 3 project 15% revenue scaling.*")
-       
