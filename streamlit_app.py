@@ -67,7 +67,7 @@ elif page == "Facility & Process Engineering":
     
     tab1, tab2 = st.tabs(["🔄 Processing Workflow", "🏗️ Facility Block Layout (Schematic)"])
     
-    # TAB 1: WORKFLOW (NATIVE PDF EXPORT - SAFE)
+    # TAB 1: WORKFLOW (NATIVE PDF EXPORT)
     with tab1:
         st.markdown("### Technical Manufacturing Process Flow")
         dot = graphviz.Digraph()
@@ -85,9 +85,10 @@ elif page == "Facility & Process Engineering":
         
         dot.edges(['A1B1', 'B1C1', 'C1D1', 'D1E1', 'E1F1', 'F1G1', 'G1H1'])
         
+        # Display Chart
         st.graphviz_chart(dot, use_container_width=True)
         
-        # Native Graphviz PDF generation (Will not crash)
+        # Native Graphviz PDF generation
         pdf_bytes_workflow = dot.pipe(format='pdf')
         st.download_button(
             label="📄 Download Workflow as PDF",
@@ -96,7 +97,7 @@ elif page == "Facility & Process Engineering":
             mime="application/pdf"
         )
 
-    # TAB 2: FACILITY LAYOUT (HTML EXPORT - BYPASSES KALEIDO BUG)
+    # TAB 2: FACILITY LAYOUT (FIXED EXPORT)
     with tab2:
         st.markdown("### Plant Zoning & Master Layout")
         fig_layout = go.Figure()
@@ -116,16 +117,17 @@ elif page == "Facility & Process Engineering":
 
         fig_layout.update_layout(xaxis=dict(visible=False), yaxis=dict(visible=False), height=550, margin=dict(l=0, r=0, t=0, b=0), plot_bgcolor='white', showlegend=False)
         
+        # Display Chart
         st.plotly_chart(fig_layout, use_container_width=True)
         
-        # Native Plotly HTML generation (100% stable, keeps interactivity)
+        # --- THE FIX: Convert to HTML to bypass Kaleido crash ---
         html_bytes_layout = fig_layout.to_html(include_plotlyjs="cdn").encode("utf-8")
         st.download_button(
-            label="🌐 Download Interactive Layout (HTML)",
+            label="🌐 Download Schematic Layout (HTML)",
             data=html_bytes_layout,
             file_name="Facility_Layout_Sadat_Plant.html",
             mime="text/html",
-            help="Downloads an interactive webpage file so you don't lose the hover descriptions."
+            help="Downloads an interactive webpage file so you don't lose the hover descriptions. If you absolutely need a PDF, open the downloaded HTML file and use Ctrl+P to Print to PDF."
         )
 
 # --- PAGE 4: TECHNICAL & OPERATIONS ---
