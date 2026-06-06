@@ -21,7 +21,7 @@ page = st.sidebar.radio("Go to",
 
 # --- PAGE 1: EXECUTIVE SUMMARY ---
 if page == "Executive Summary":
-    st.title("https://t3.ftcdn.net/jpg/20/00/38/32/360_F_2000383265_dE7JxtDYWwgoGrh2LVGH5od9pmVIkwqp.jpg Feasibilty Study Extruded Snack Plant")
+    st.title("🏭 Feasibilty Study Extruded Snack Plant")
     st.subheader("Board of Directors Feasibility Presentation")
     st.markdown("---")
     
