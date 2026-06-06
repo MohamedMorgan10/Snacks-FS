@@ -83,7 +83,13 @@ elif page == "Facility & Process Engineering":
         dot.node('G1', 'Multi-Head Weighers\n& 2x VFFS Systems', style='filled', fillcolor='#C1E9C1')
         dot.node('H1', 'Finished Goods\nPalletizing', style='filled', fillcolor='#D2E8F1')
         
-        dot.edges(['A1B1', 'B1C1', 'C1D1', 'D1E1', 'E1F1', 'F1G1', 'G1H1'])
+        dot.edge('A1', 'B1')
+        dot.edge('B1', 'C1')
+        dot.edge('C1', 'D1')
+        dot.edge('D1', 'E1')
+        dot.edge('E1', 'F1')
+        dot.edge('F1', 'G1')
+        dot.edge('G1', 'H1')
         st.graphviz_chart(dot, use_container_width=True)
 
     with tab2:
