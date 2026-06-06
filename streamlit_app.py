@@ -92,6 +92,14 @@ elif page == "Facility & Process Engineering":
         dot.edge('G1', 'H1')
         st.graphviz_chart(dot, use_container_width=True)
 
+        st.markdown("---")
+        st.markdown("### 📖 Detailed Process Guide: The Science of the Crunch")
+        st.image(
+            "Extruded_Snack_Manufacturing_Process_Guide.png",
+            caption="Step-by-Step Guide to Extruded Snack Manufacturing — All 4 Phases",
+            use_container_width=True
+        )
+
     with tab2:
         st.markdown("### Plant Zoning & Master Layout")
         fig_layout = go.Figure()
@@ -471,6 +479,5 @@ elif page == "BOM & Costing Analysis":
             f"the daily material cost exposure is approximately **${cost_per_kg * 150 * 16:,.0f} USD/day**, "
             f"underscoring the importance of bulk purchasing contracts for Flavour and Oil."
         )
-
 
     
