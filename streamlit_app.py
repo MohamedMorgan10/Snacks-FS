@@ -4,169 +4,168 @@ import plotly.express as px
 import plotly.graph_objects as go
 import graphviz
 
-# --- PAGE CONFIGURATION ---
+# --- PAGE CONFIG ---
 st.set_page_config(
-    page_title="Investment Proposal: Sadat City Plant",
+    page_title="Sadat City Snack Plant",
     page_icon="🏭",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# --- SIDEBAR NAVIGATION ---
-st.sidebar.title("Presentation Menu")
-st.sidebar.markdown("Navigate through the feasibility study sections:")
-page = st.sidebar.radio("Go to", 
-    ["Executive Summary", "Market Analysis", "Facility & Process Engineering", "Technical & Operations", "Financial Projections"]
-)
+# --- SIDEBAR ---
+st.sidebar.title("🏭 Feasibility Dashboard")
+page = st.sidebar.radio("Navigation", [
+    "Executive Summary",
+    "Market Analysis",
+    "Facility & Process Engineering",
+    "Technical & Operations",
+    "Financial Projections",
+    "Risk Analysis"
+])
 
-# --- PAGE 1: EXECUTIVE SUMMARY ---
+# ==============================
+# PAGE 1: EXECUTIVE SUMMARY
+# ==============================
 if page == "Executive Summary":
     st.title("🏭 Sadat City Extruded Snack Plant")
-    st.subheader("Board of Directors Feasibility Presentation")
-    st.markdown("---")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("### 📌 Project Parameters")
-        st.markdown("""
-        * **Location:** Sadat City, Monufia Governorate, Egypt
-        * **Core Product:** Puff Corn Extruded Snacks 
-        * **Capacity:** 150 kg/hr Base Line
-        * **Primary Technology:** Jinan Sunward High-Precision Twin-Screw Extrusion
-        * **Packaging:** 2x High-speed Vertical Form Fill Seal (VFFS) machines
-        """)
-    with col2:
-        st.markdown("### 🎯 Strategic Objectives")
-        st.markdown("""
-        * Capture growing domestic demand for affordable, high-quality snacks.
-        * Reach financial break-even point by month 14 of active production.
-        * Ensure a steady 80% OEE (Overall Equipment Effectiveness) within the first 6 months.
-        * Achieve Return on Investment (ROI) within 2.5 to 3 years.
-        """)
-    st.info("💡 **Recommendation:** The project is highly feasible. Proceed with the 12,000,000 EGP CAPEX allocation for land acquisition and machinery sourcing based on strong cash flow projections.")
 
-# --- PAGE 2: MARKET ANALYSIS ---
+    col1, col2 = st.columns(2)
+
+    col1.markdown("""
+    ### 📌 Project Parameters
+    - Location: Sadat City, Egypt  
+    - Capacity: 150 kg/hr  
+    - Technology: Twin-Screw Extrusion  
+    - Packaging: 2 VFFS lines  
+    """)
+
+    col2.markdown("""
+    ### 🎯 Strategic Goals
+    - Break-even: Month 14  
+    - OEE Target: 80%  
+    - ROI: 2.5 – 3 years  
+    """)
+
+    st.success("✅ Project is financially viable and ready for execution.")
+
+# ==============================
+# PAGE 2: MARKET ANALYSIS
+# ==============================
 elif page == "Market Analysis":
-    st.title("📊 Market Analysis & Demand")
-    st.markdown("---")
-    
-    # Projected market growth based on FMCG sector youth demographic drivers
-    market_data = pd.DataFrame({
-        "Year": ["2024", "2025", "2026", "2027", "2028"],
-        "Market Size (Billion EGP)": [12.5, 14.1, 16.0, 18.2, 20.5]
+    st.title("📊 Market Growth")
+
+    data = pd.DataFrame({
+        "Year": [2024, 2025, 2026, 2027, 2028],
+        "Market": [12.5, 14.1, 16.0, 18.2, 20.5]
     })
-    fig = px.line(market_data, x="Year", y="Market Size (Billion EGP)", 
-                 title="Projected Extruded Snack Market Size Growth (Egypt)",
-                 markers=True, text="Market Size (Billion EGP)")
-    fig.update_traces(textposition="top center", line_color="#1f77b4", line_width=4, marker_size=10)
+
+    fig = px.line(data, x="Year", y="Market", markers=True)
     st.plotly_chart(fig, use_container_width=True)
 
-# --- PAGE 3: FACILITY & PROCESS ENGINEERING ---
+# ==============================
+# PAGE 3: FACILITY
+# ==============================
 elif page == "Facility & Process Engineering":
-    st.title("📐 Facility Layout & Process Flow")
-    st.markdown("---")
-    
-    tab1, tab2 = st.tabs(["🔄 Processing Workflow", "🏗️ Facility Block Layout (Schematic)"])
-    
-    with tab1:
-        st.markdown("### Technical Manufacturing Process Flow")
-        dot = graphviz.Digraph()
-        dot.attr(rankdir='LR', size='12,6')
-        dot.attr('node', shape='box', fontname='Helvetica', fontsize='11')
-        
-        dot.node('A1', 'Bulk Intake\n(Corn Grits / 10-12% Moisture)', style='filled', fillcolor='#D2E8F1')
-        dot.node('B1', 'Batch Mixing &\nConditioning (16-18% Target)', style='filled', fillcolor='#EAEAEA')
-        dot.node('C1', 'Twin-Screw Extrusion\n(150 kg/hr / 130-180°C)', style='filled', fillcolor='#FBC4C4')
-        dot.node('D1', 'Continuous\nDrying/Roasting Oven', style='filled', fillcolor='#FBC4C4')
-        dot.node('E1', 'Rotary Coating Drum\n(Oil + Flavor Slurry)', style='filled', fillcolor='#EAEAEA')
-        dot.node('F1', 'Ambient Vibratory\nCooling Conveyor', style='filled', fillcolor='#EAEAEA')
-        dot.node('G1', 'Multi-Head Weighers\n& 2x VFFS Systems', style='filled', fillcolor='#C1E9C1')
-        dot.node('H1', 'Finished Goods\nPalletizing', style='filled', fillcolor='#D2E8F1')
-        
-        dot.edges(['A1B1', 'B1C1', 'C1D1', 'D1E1', 'E1F1', 'F1G1', 'G1H1'])
-        st.graphviz_chart(dot, use_container_width=True)
+    st.title("📐 Process Flow")
 
-    with tab2:
-        st.markdown("### Plant Zoning & Master Layout")
-        fig_layout = go.Figure()
-        def add_zone(fig, x0, y0, x1, y1, color, name, description):
-            fig.add_shape(type="rect", x0=x0, y0=y0, x1=x1, y1=y1, line=dict(color="black", width=2), fillcolor=color)
-            fig.add_annotation(x=(x0+x1)/2, y=(y0+y1)/2, text=f"<b>{name}</b>", showarrow=False, font=dict(size=13, color="black"))
-            fig.add_trace(go.Scatter(x=[(x0+x1)/2], y=[(y0+y1)/2], mode='markers', marker=dict(size=0.1, color='rgba(0,0,0,0)'), name=name, hoverinfo='text', text=f"<b>{name}</b><br>{description}"))
+    dot = graphviz.Digraph()
+    dot.attr(rankdir='LR')
 
-        fig_layout.add_shape(type="rect", x0=0, y0=0, x1=100, y1=100, line=dict(color="black", width=4))
-        add_zone(fig_layout, 0, 75, 25, 100, "#a8d8ea", "RM Intake", "Pneumatic unloading bays.")
-        add_zone(fig_layout, 0, 0, 25, 75, "#aa96da", "Inventory", "Climate controlled storage.")
-        add_zone(fig_layout, 25, 35, 75, 100, "#ffb6b9", "Main Production Hall", "Extrusion and VFFS cells.")
-        add_zone(fig_layout, 75, 45, 100, 100, "#a8e6cf", "Finished Goods", "Pallet racking & dispatch.")
-        add_zone(fig_layout, 25, 0, 45, 35, "#ffd3b6", "Maintenance", "Workshop and spare parts.")
-        add_zone(fig_layout, 45, 0, 60, 35, "#ffaaa5", "QA Lab", "In-line sampling.")
-        add_zone(fig_layout, 60, 0, 100, 45, "#d4f0f0", "Admin", "Offices & control center.")
+    dot.edges([
+        ('Raw Material', 'Mixing'),
+        ('Mixing', 'Extrusion'),
+        ('Extrusion', 'Drying'),
+        ('Drying', 'Coating'),
+        ('Coating', 'Cooling'),
+        ('Cooling', 'Packaging'),
+        ('Packaging', 'Finished Goods')
+    ])
 
-        fig_layout.update_layout(xaxis=dict(visible=False), yaxis=dict(visible=False), height=550, margin=dict(l=0, r=0, t=0, b=0), plot_bgcolor='white', showlegend=False)
-        st.plotly_chart(fig_layout, use_container_width=True)
+    st.graphviz_chart(dot)
 
-# --- PAGE 4: TECHNICAL & OPERATIONS ---
+# ==============================
+# PAGE 4: TECHNICAL
+# ==============================
 elif page == "Technical & Operations":
-    st.title("⚙️ Technical Feasibility & Operations")
-    st.markdown("---")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("### Equipment Specifications")
-        st.success("**Extrusion Line**\n* 150 kg/hr Jinan Sunward Twin-Screw Extruder\n* Automated material feeding\n* High-efficiency continuous drying oven")
-        st.info("**Packaging Cell**\n* 2 x VFFS Packaging Machines\n* Integrated multi-head weighers\n* Date coding and automated splicing")
-        st.warning("**Utility Consumptions (Estimated Base Load)**\n* ⚡ **Electricity:** ~65 kW/h (Total Extrusion + Packaging)\n* 🔥 **Natural Gas:** ~8 m³/hr (Roasting/Drying Oven)\n* 💧 **Water:** ~25 L/hr (Conditioning & CIP requirements)\n* 💨 **Compressed Air:** ~0.8 m³/min @ 7 bar (Pneumatics & VFFS)")
-        
-    with col2:
-        st.markdown("### Operational Excellence Framework")
-        st.markdown("""
-        * **Total Productive Maintenance (TPM):** Autonomous maintenance trained at the operator level.
-        * **Lean Manufacturing:** Continuous Gemba walks and Root Cause Analysis (RCA) to mitigate waste.
-        * **Predictive Maintenance:** Core assets integrated into centralized plant monitoring to prevent downtime.
-        * **Labor & Compliance:** Standard 40-48 hour workweeks aligned with current 7,000 EGP private-sector minimum wage laws.
-        """)
+    st.title("⚙️ Operations")
 
-# --- PAGE 5: FINANCIAL PROJECTIONS (ERROR-FREE LOGIC) ---
+    st.info("Power: 65 kW | Gas: 8 m³/hr | Air: 0.8 m³/min")
+
+    st.markdown("""
+    ✅ Lean Manufacturing  
+    ✅ TPM  
+    ✅ Predictive Maintenance  
+    """)
+
+# ==============================
+# PAGE 5: FINANCIAL MODEL
+# ==============================
 elif page == "Financial Projections":
-    st.title("💰 Financial Projections & Feasibility")
-    st.markdown("---")
-    col1, col2 = st.columns(2)
+    st.title("💰 Financial Model")
+
+    # --- USER INPUTS ---
+    growth_rate = st.slider("Revenue Growth %", 5, 30, 15) / 100
+    cost_ratio = st.slider("Direct Cost % of Revenue", 40, 80, 66) / 100
+    overhead_growth = st.slider("Overhead Growth %", 5, 20, 10) / 100
+
+    revenue_y1 = 22_000_000
+    overhead_y1 = 2_000_000
+
+    years = ["Year 1", "Year 2", "Year 3"]
+
+    revenue = [
+        revenue_y1,
+        revenue_y1 * (1 + growth_rate),
+        revenue_y1 * (1 + growth_rate)**2
+    ]
+
+    costs = [r * cost_ratio for r in revenue]
+
+    overhead = [
+        overhead_y1,
+        overhead_y1 * (1 + overhead_growth),
+        overhead_y1 * (1 + overhead_growth)**2
+    ]
+
+    df = pd.DataFrame({
+        "Year": years,
+        "Revenue": revenue,
+        "Costs": costs,
+        "Overhead": overhead
+    })
+
+    df["EBITDA"] = df["Revenue"] - df["Costs"] - df["Overhead"]
+
+    # --- KPI SECTION ---
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("EBITDA Margin Y1", f"{df['EBITDA'][0] / df['Revenue'][0]:.1%}")
+    col2.metric("EBITDA Year 3", f"{df['EBITDA'][2]:,.0f} EGP")
+    col3.metric("Revenue Year 3", f"{df['Revenue'][2]:,.0f} EGP")
+
+    # --- BAR CHART ---
+    fig = go.Figure()
+    fig.add_bar(name="Revenue", x=years, y=revenue)
+    fig.add_bar(name="Costs", x=years, y=costs)
+    fig.add_bar(name="EBITDA", x=years, y=df["EBITDA"])
+
+    fig.update_layout(barmode="group")
+    st.plotly_chart(fig, use_container_width=True)
+
+    # =========================
+    # BREAK-EVEN ANALYSIS
+    # =========================
+    st.subheader("📉 Break-even Analysis")
+
+    fixed_costs = overhead_y1
+    contribution_margin = 1 - cost_ratio
+    breakeven_revenue = fixed_costs / contribution_margin
+
+    st.metric("Break-even Revenue", f"{breakeven_revenue:,.0f} EGP")
+
+    # =========================
+    # CASH FLOW
+    # =========================
+    st.subheader("💵 Cash Flow")
+
+
     
-    with col1:
-        st.markdown("### Total CAPEX: 12,000,000 EGP")
-        # Actual values extracted from the feasibility document
-        capex_data = pd.DataFrame({
-            "Asset Category": ["Land & Building", "Machinery & Installation", "Initial Working Capital"],
-            "Amount (EGP)": [8000000, 2500000, 1500000]
-        })
-        fig_pie = px.pie(capex_data, values='Amount (EGP)', names='Asset Category', hole=0.4, 
-                         color_discrete_sequence=['#1f77b4', '#ff7f0e', '#2ca02c'])
-        st.plotly_chart(fig_pie, use_container_width=True)
-        st.caption("*Sourcing Structure: 60% Owner Equity, 40% Commercial Bank Loan (CBE Industrial Initiative).*")
-        
-    with col2:
-        st.markdown("### 3-Year P&L Forecast (EGP)")
-        
-        # INTERNAL PANDAS CALCULATION (Fixes Excel #DIV/0! and #REF! errors)
-        y1_revenue = 22000000
-        y1_direct_costs = 14500000
-        y1_overhead = 2000000
-        growth_rate = 1.15  # Projecting a conservative 15% annual growth
-
-        financials = pd.DataFrame({
-            "Year": ["Year 1", "Year 2", "Year 3"],
-            "Gross Revenue": [y1_revenue, y1_revenue * growth_rate, y1_revenue * (growth_rate**2)],
-            "Direct Costs": [y1_direct_costs, y1_direct_costs * growth_rate, y1_direct_costs * (growth_rate**2)],
-            "Overhead": [y1_overhead, y1_overhead * 1.10, y1_overhead * (1.10**2)] # Overhead grows at 10%
-        })
-        # Calculate EBITDA dynamically without circular references
-        financials["EBITDA"] = financials["Gross Revenue"] - financials["Direct Costs"] - financials["Overhead"]
-
-        fig_bar = go.Figure(data=[
-            go.Bar(name='Gross Revenue', x=financials['Year'], y=financials['Gross Revenue'], marker_color='#2ca02c'),
-            go.Bar(name='Direct Costs', x=financials['Year'], y=financials['Direct Costs'], marker_color='#d62728'),
-            go.Bar(name='EBITDA', x=financials['Year'], y=financials['EBITDA'], marker_color='#1f77b4')
-        ])
-        fig_bar.update_layout(barmode='group', title="Income & Cost Analysis")
-        st.plotly_chart(fig_bar, use_container_width=True)
-        st.caption("*Year 1 data based on official feasibility estimates. Year 2 & 3 project 15% revenue scaling.*")
